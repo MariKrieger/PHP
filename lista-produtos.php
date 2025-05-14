@@ -1,21 +1,24 @@
-<?php
+<?php 
 // include dos arquivox
 include_once './include/logado.php';
 include_once './include/conexao.php';
 include_once './include/header.php';
- 
-$sql = 'SELECT p.ProdutoID AS ProdutoID, p.Nome AS Nome, cg.Nome AS Categoria, p.Preco AS Preco
-FROM produtos as p
-INNER JOIN categorias as cg ON cg.CategoriaID = p.CategoriaID';
-$resultado = mysqli_query($conn, $sql)
- 
+
+$sql = "
+  SELECT p.ProdutoID, p.Nome, c.Nome AS CategoriaNome, p.Preco
+  FROM produtos p
+  JOIN categorias c ON p.CategoriaID = c.CategoriaID;
+";
+
+$result = mysqli_query($conn, $sql);
+
 ?>
- 
+
 <main>
- 
+
   <div class="container">
       <h1>Lista de Produtos</h1>
-      <a href="./salvar-produtos.php" class="btn btn-add">Incluir</a>
+      <a href="./salvar-produtos.php" class="btn btn-add">Incluir</a> 
       <table>
         <thead>
           <tr>
@@ -27,29 +30,23 @@ $resultado = mysqli_query($conn, $sql)
           </tr>
         </thead>
         <tbody>
-          <?php
-          while($dado = mysqli_fetch_assoc($resultado) ) {
-          ?>
+          <?php while($row = mysqli_fetch_assoc($result)): ?>
             <tr>
-              <td><?php echo  $dado['ProdutoID']?></td>
-              <td><?php echo $dado['Nome']?></td>
-              <td><?php echo $dado['Categoria']?></td>
-              <td><?php echo 'R$' .$dado['Preco']?></td>
+              <td><?php echo $row['ProdutoID'] ?></td>
+              <td><?php echo $row['Nome'] ?></td>
+              <td><?php echo $row['CategoriaNome'] ?></td>
+              <td>R$<?php echo number_format($row['Preco'], 2, ',', '.') ?></td>
               <td>
-                <a href="#" class="btn btn-edit">Editar</a>
-                <a href="#" class="btn btn-delete">Excluir</a>
-              </td>
+                <a href="salvar-produtos.php?id=<?php echo $row['ProdutoID'] ?>" class="btn btn-edit">Editar</a>
+                <a href="./action/produtos.php?action=delete&id=<?php echo $row['ProdutoID'] ?>" class="btn btn-delete">Excluir</a>
+              </td> 
             </tr>
-          <?php
-          }
-          ?>
- 
+          <?php endwhile; ?>
         </tbody>
       </table>
     </div>
- 
-<?php
+
+<?php 
   // include dos arquivox
   include_once './include/footer.php';
   ?>
- 

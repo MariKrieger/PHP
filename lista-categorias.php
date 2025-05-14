@@ -1,13 +1,15 @@
-<?php
+<?php 
 // include dos arquivox
 include_once './include/logado.php';
 include_once './include/conexao.php';
 include_once './include/header.php';
-$sql = 'SELECT * FROM categorias';
-  $resultado = mysqli_query($conn, $sql);
- 
+
+$sql = "SELECT * FROM categorias;";
+$result = mysqli_query($conn, $sql);
+
 ?>
   <main>
+
     <div class="container">
         <h1>Lista de Categorias</h1>
         <a href="./salvar-categorias.php" class="btn btn-add">Incluir</a>
@@ -20,31 +22,25 @@ $sql = 'SELECT * FROM categorias';
             </tr>
           </thead>
           <tbody>
-             <?php
-              while($dado = mysqli_fetch_assoc($resultado) ) {
-              ?>
-            <tr>
-              <td><?php echo $dado['CategoriaID']?></td>
-              <td><?php echo $dado['Nome']?></td>
-              <td>
-                <a href="#" class="btn btn-edit">Editar</a>
-                <a href="#" class="btn btn-delete">Excluir</a>
-              </td>
-            </tr>
-            <?php
-              }
-            ?>
-           
+            <?php while($row = mysqli_fetch_assoc($result)): ?>
+              <tr>
+                <td><?php echo $row['CategoriaID'] ?></td>
+                <td><?php echo $row['Nome'] ?></td>
+                <td>
+                  <a href="salvar-categorias.php?id=<?php echo $row['CategoriaID'] ?>" class="btn btn-edit">Editar</a>
+                  <a href="./action/categorias.php?action=delete&id=<?php echo $row['CategoriaID'] ?>" class="btn btn-delete">Excluir</a>
+                </td>
+              </tr>
+            <?php endwhile; ?>
           </tbody>
         </table>
       </div>
- 
- 
+
+
    
   </main>
- 
-  <?php
+
+  <?php 
   // include dos arquivox
   include_once './include/footer.php';
   ?>
- 
